@@ -147,7 +147,7 @@ export default function App() {
       <section className="sec" id="market">
         <h2>Top Artworks</h2>
         <div className="railwrap">
-          <button className="arr l" aria-label="previous", onClick={() => rail.current.scrollBy({ left: -320, beus avior: "smooth" })}><ChevronLeft size={18} /></button>
+          <button className="arr l" aria-label="Previous" onClick={() => rail.current.scrollBy({ left: -320, behavior: "smooth" })}><ChevronLeft size={18} /></button>
           <div className="rail" ref={rail}>
             {ITEMS.map((i) => {
               const [a, b, c] = hms(i.left - sec);
@@ -180,7 +180,7 @@ export default function App() {
               <div className="row">
                 {owned.includes(sel.id)
                   ? <button className="btn ghost" disabled><Check size={14} /> You own this</button>
-                  : <button className="btn" onClick={() => buy(sel)}>Buy Now</button>/button>}
+                  : <button className="btn" onClick={() => buy(sel)}>Buy Now</button>}
                 <button className="btn ghost" onClick={() => toggleLike(sel.id)}><Heart size={14} fill={liked.includes(sel.id) ? "currentColor" : "none"} /> Like</button>
               </div>
             </div>
