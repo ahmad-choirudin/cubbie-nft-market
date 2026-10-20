@@ -7,7 +7,6 @@ import chrome from "./assets/chrome.jpg";
 import urban from "./assets/urban.jpg";
 import ronin from "./assets/ronin.jpg";
 
-// Koleksi CUBBIE. `left` = sisa detik lelang saat halaman dibuka.
 const ITEMS = [
   { id: 1, name: "Cubbie Operator", img: operator, price: 0.8, likes: 92, owner: "@wzard", left: 11904 },
   { id: 2, name: "Cubbie Ronin", img: ronin, price: 1.2, likes: 148, owner: "@nishar", left: 8420 },
@@ -46,7 +45,7 @@ function useWallet() {
     return () => e.removeListener?.("accountsChanged", on);
   }, []);
   const connect = async () => {
-    if (!window.ethereum) throw new Error("Wallet tidak ditemukan. Pasang MetaMask dulu.");
+    if (!window.ethereum) throw new Error("Wallet not found. Please install MetaMask first.");
     load((await window.ethereum.request({ method: "eth_requestAccounts" }))[0]);
   };
   return { acc, bal, connect, disconnect: () => load(null) };
@@ -75,10 +74,9 @@ export default function App() {
   const say = (msg, ok = true) => { setToast({ msg, ok }); setTimeout(() => setToast(null), 3200); };
   const connect = () => w.connect().catch((e) => say(e.message, false));
 
-  // Simulasi beli. Untuk transaksi asli, panggil smart contract (ethers/viem) di sini.
   const buy = (i) => {
     if (!w.acc) return say("Connect your wallet first to buy.", false);
-    if (w.bal !== null && +w.bal < i.price) return say(`Saldo ${w.bal} ETH is lower than ${i.price} ETH.`, false);
+    if (w.bal !== null && +w.bal < i.price) return say(`Your balance of ${w.bal} ETH is lower than ${i.price} ETH.`, false);
     setOwned((o) => [...o, i.id]); setSel(null); say(`${i.name} is now yours.`);
   };
   const toggleLike = (id) => setLiked((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
@@ -170,7 +168,7 @@ export default function App() {
       {sel && (
         <div className="scrim" onClick={() => setSel(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={sel.name}>
-            <button className="x" onClick={() => setSel(null)} aria-label="Tutup"><X size={18} /></button>
+            <button className="x" onClick={() => setSel(null)} aria-label="Close"><X size={18} /></button>
             <img src={sel.img} alt={sel.name} />
             <div className="info">
               <small>CUBBIE COLLECTION</small>
