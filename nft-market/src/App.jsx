@@ -3,22 +3,22 @@ import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIc
 import Marketplace from "./Marketplace";
 import Collection from "./Collection";
 import Create from "./Create";
-import operator from "./assets/operator.jpg";
-import bomber from "./assets/bomber.jpg";
-import seraph from "./assets/seraph.jpg";
-import chrome from "./assets/chrome.jpg";
-import urban from "./assets/urban.jpg";
-import ronin from "./assets/ronin.jpg";
-import gentleman from "./assets/gentleman.jpg";
-import boss from "./assets/boss.jpg";
-import casual from "./assets/casual.jpg";
-import kimono from "./assets/kimono.jpg";
-import astronaut from "./assets/astronaut.jpg";
-import dojo from "./assets/dojo.jpg";
-import king from "./assets/king.jpg";
-import striker from "./assets/striker.jpg";
-import ninjachef from "./assets/ninjachef.jpg";
-import rocker from "./assets/rocker.jpg";
+import operator from "./assets/operator.webp";
+import bomber from "./assets/bomber.webp";
+import seraph from "./assets/seraph.webp";
+import chrome from "./assets/chrome.webp";
+import urban from "./assets/urban.webp";
+import ronin from "./assets/ronin.webp";
+import gentleman from "./assets/gentleman.webp";
+import boss from "./assets/boss.webp";
+import casual from "./assets/casual.webp";
+import kimono from "./assets/kimono.webp";
+import astronaut from "./assets/astronaut.webp";
+import dojo from "./assets/dojo.webp";
+import king from "./assets/king.webp";
+import striker from "./assets/striker.webp";
+import ninjachef from "./assets/ninjachef.webp";
+import rocker from "./assets/rocker.webp";
 
 const ITEMS = [
   { id: 1, name: "Cubbie Operator", img: operator, price: 0.8, likes: 92, owner: "@wzard", left: 11904 },
@@ -154,8 +154,8 @@ export default function App() {
           {w.acc
             ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal} ETH</button>
             : <button className="btn" onClick={connect}>Register</button>}
+          <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
         </div>
-        <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
       </header>
 
       {page === "create" ? (
