@@ -1,11 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle } from "lucide-react";
+import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIcon } from "lucide-react";
+import Marketplace from "./Marketplace";
 import operator from "./assets/operator.jpg";
 import bomber from "./assets/bomber.jpg";
 import seraph from "./assets/seraph.jpg";
 import chrome from "./assets/chrome.jpg";
 import urban from "./assets/urban.jpg";
 import ronin from "./assets/ronin.jpg";
+import gentleman from "./assets/gentleman.jpg";
+import boss from "./assets/boss.jpg";
+import casual from "./assets/casual.jpg";
+import kimono from "./assets/kimono.jpg";
+import astronaut from "./assets/astronaut.jpg";
+import dojo from "./assets/dojo.jpg";
+import king from "./assets/king.jpg";
+import striker from "./assets/striker.jpg";
+import ninjachef from "./assets/ninjachef.jpg";
+import rocker from "./assets/rocker.jpg";
 
 const ITEMS = [
   { id: 1, name: "Cubbie Operator", img: operator, price: 0.8, likes: 92, owner: "@wzard", left: 11904 },
@@ -14,6 +25,16 @@ const ITEMS = [
   { id: 4, name: "Cubbie Bomber", img: bomber, price: 0.65, likes: 61, owner: "@rimba", left: 5290 },
   { id: 5, name: "Cubbie Urban", img: urban, price: 0.95, likes: 77, owner: "@gema", left: 20100 },
   { id: 6, name: "Cubbie Seraph", img: seraph, price: 4.89, likes: 312, owner: "@nishar", left: 3790 },
+  { id: 7, name: "Cubbie Gentleman", img: gentleman, price: 0.7, likes: 54, owner: "@wzard", left: 9800 },
+  { id: 8, name: "Cubbie Boss", img: boss, price: 1.1, likes: 88, owner: "@gema", left: 14200 },
+  { id: 9, name: "Cubbie Casual", img: casual, price: 0.5, likes: 39, owner: "@rimba", left: 7300 },
+  { id: 10, name: "Cubbie Kimono", img: kimono, price: 1.6, likes: 121, owner: "@kilau", left: 18600 },
+  { id: 11, name: "Cubbie Astronaut", img: astronaut, price: 2.1, likes: 176, owner: "@nishar", left: 12500 },
+  { id: 12, name: "Cubbie Dojo", img: dojo, price: 0.85, likes: 67, owner: "@wzard", left: 6100 },
+  { id: 13, name: "Cubbie King", img: king, price: 3.5, likes: 264, owner: "@nishar", left: 21700 },
+  { id: 14, name: "Cubbie Striker", img: striker, price: 0.6, likes: 45, owner: "@gema", left: 4400 },
+  { id: 15, name: "Cubbie Ninja Chef", img: ninjachef, price: 1.9, likes: 139, owner: "@kilau", left: 16800 },
+  { id: 16, name: "Cubbie Rocker", img: rocker, price: 1.4, likes: 102, owner: "@rimba", left: 10900 },
 ];
 const RELEASE = 3 * 3600 + 24 * 60 + 56;
 const pad = (n) => String(n).padStart(2, "0");
@@ -70,9 +91,35 @@ export default function App() {
   const [owned, setOwned] = useState([]);
   const [liked, setLiked] = useState([]);
   const [toast, setToast] = useState(null);
+  const [menu, setMenu] = useState(false);
+  const headerRef = useRef(null);
+
+  const [page, setPage] = useState(() => (location.hash === "#marketplace" ? "market" : "home"));
+  useEffect(() => {
+    const onHash = () => setPage(location.hash === "#marketplace" ? "market" : "home");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (page === "home" && location.hash) {
+      setTimeout(() => document.querySelector(location.hash)?.scrollIntoView(), 0);
+    }
+  }, [page]);
 
   const say = (msg, ok = true) => { setToast({ msg, ok }); setTimeout(() => setToast(null), 3200); };
-  const connect = () => w.connect().catch((e) => say(e.message, false));
+  const connect = () => {
+    if (!window.ethereum) {
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const url = mobile
+        ? `https://metamask.app.link/dapp/${location.host}${location.pathname}${location.search}`
+        : "https://metamask.io/download/";
+      say(mobile ? "MetaMask not found. Opening the MetaMask app…" : "MetaMask not found. Opening the install page…", false);
+      setTimeout(() => (mobile ? (location.href = url) : window.open(url, "_blank", "noopener")), 1000);
+      return;
+    }
+    w.connect().catch((e) => say(e.message, false));
+  };
 
   const buy = (i) => {
     if (!w.acc) return say("Connect your wallet first to buy.", false);
@@ -85,16 +132,28 @@ export default function App() {
 
   return (
     <>
-      <header className="top">
+      <header className="top" ref={headerRef}>
         <a className="brand" href="#">Cubbie</a>
-        <nav><a href="#market">Marketplace</a><a href="#release">Drops</a><a href="#hero">About</a></nav>
+        <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#release">Drops</a><a href="#hero">About</a></nav>
         <div className="reg">
           {w.acc
             ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal} ETH</button>
             : <button className="btn" onClick={connect}>Register</button>}
         </div>
+        <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
       </header>
 
+      {page === "market" ? (
+        <Marketplace
+          items={ITEMS}
+          sec={sec}
+          owned={owned}
+          liked={liked}
+          onOpen={setSel}
+          onBid={buy}
+        />
+      ) : (
+        <>
       <section className="hero" id="hero">
         <div className="panel">
           <div className="stack">
@@ -113,7 +172,7 @@ export default function App() {
               <a className="btn ghost" href="#release">How it works?</a>
             </div>
             <div className="who">
-              <div className="av">{ITEMS.slice(3).map((i) => <img key={i.id} src={i.img} alt="" />)}</div>
+              <div className="av">{ITEMS.slice(3, 6).map((i) => <img key={i.id} src={i.img} alt="" />)}</div>
               <div>+500 NFT Collectors<small>★ 4.9</small></div>
             </div>
           </div>
@@ -162,6 +221,8 @@ export default function App() {
           <button className="arr r" aria-label="Next" onClick={() => rail.current.scrollBy({ left: 320, behavior: "smooth" })}><ChevronRight size={18} /></button>
         </div>
       </section>
+        </>
+      )}
 
       <footer className="foot">© 2026 Cubbie. All artworks belong to the CUBBIE collection.</footer>
 
