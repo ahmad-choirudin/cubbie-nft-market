@@ -108,3 +108,9 @@ button.mk-creator { background: none; border: 0; color: inherit; font: inherit; 
 .cr-row div { flex: 1; font-size: 14px; }
 .cr-row button { width: 38px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: #ff8a98; cursor: pointer; }
 .cr-row button:hover { background: rgba(255, 90, 110, .14); }
+
+/* Fix: kotak cari + sort tidak melebar keluar layar */
+.mk-tools { min-width: 0; }
+.mk-search { min-width: 0; }
+.mk-search input { width: 100%; }
+.mk-tools select { flex: 0 0 auto; width: auto; max-width: 44%; text-overflow: ellipsis; }
