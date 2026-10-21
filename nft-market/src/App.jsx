@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIcon } from "lucide-react";
 import Marketplace from "./Marketplace";
+import Collection from "./Collection";
 import operator from "./assets/operator.jpg";
 import bomber from "./assets/bomber.jpg";
 import seraph from "./assets/seraph.jpg";
@@ -39,6 +40,13 @@ const ITEMS = [
 const RELEASE = 3 * 3600 + 24 * 60 + 56;
 const pad = (n) => String(n).padStart(2, "0");
 const hms = (s) => { s = Math.max(0, s); return [Math.floor(s / 3600), Math.floor((s % 3600) / 60), s % 60].map(pad); };
+function usePersist(key, init) {
+  const [v, setV] = useState(() => {
+    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : init; } catch { return init; }
+  });
+  useEffect(() => { try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* abaikan */ } }, [key, v]);
+  return [v, setV];
+}
 const short = (a) => `${a.slice(0, 6)}…${a.slice(-4)}`;
 
 function useClock() {
@@ -88,15 +96,16 @@ export default function App() {
   const sec = useClock();
   const rail = useRef(null);
   const [sel, setSel] = useState(null);
-  const [owned, setOwned] = useState([]);
-  const [liked, setLiked] = useState([]);
+  const [owned, setOwned] = usePersist("cubbie-owned", []);
+  const [liked, setLiked] = usePersist("cubbie-liked", []);
   const [toast, setToast] = useState(null);
   const [menu, setMenu] = useState(false);
   const headerRef = useRef(null);
 
-  const [page, setPage] = useState(() => (location.hash === "#marketplace" ? "market" : "home"));
+  const pageFromHash = () => (location.hash === "#marketplace" ? "market" : location.hash === "#collection" ? "collection" : "home");
+  const [page, setPage] = useState(pageFromHash);
   useEffect(() => {
-    const onHash = () => setPage(location.hash === "#marketplace" ? "market" : "home");
+    const onHash = () => setPage(pageFromHash());
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
@@ -134,7 +143,7 @@ export default function App() {
     <>
       <header className="top" ref={headerRef}>
         <a className="brand" href="#">Cubbie</a>
-        <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#release">Drops</a><a href="#hero">About</a></nav>
+        <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#release">Drops</a><a href="#collection">My Collection{owned.length > 0 && <span className="cnt">{owned.length}</span>}</a><a href="#hero">About</a></nav>
         <div className="reg">
           {w.acc
             ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal} ETH</button>
@@ -143,7 +152,9 @@ export default function App() {
         <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
       </header>
 
-      {page === "market" ? (
+      {page === "collection" ? (
+        <Collection items={ITEMS} owned={owned} onOpen={setSel} />
+      ) : page === "market" ? (
         <Marketplace
           items={ITEMS}
           sec={sec}

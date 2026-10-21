@@ -69,3 +69,18 @@
   .top nav.open a { padding: 14px 0; font-size: 16px; color: #fff; border-bottom: 1px solid #1d1d22; }
   .top nav.open a:last-child { border-bottom: 0; }
 }
+
+/* Search, sort, filter, empty state */
+.mk-count { font-size: 12px; color: #8b8b94; }
+.mk-tools { display: flex; gap: 10px; margin-bottom: 16px; }
+.mk-search { flex: 1; display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 42px; border: 1px solid #2a2a30; border-radius: 10px; background: #111114; color: #8b8b94; }
+.mk-search input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: #fff; font: inherit; font-size: 14px; }
+.mk-tools select { height: 42px; padding: 0 10px; border: 1px solid #2a2a30; border-radius: 10px; background: #111114; color: #fff; font: inherit; font-size: 13px; max-width: 46%; }
+.mk-chip { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 16px; padding: 5px 6px 5px 12px; border-radius: 99px; background: #5b5bf0; font-size: 12px; }
+.mk-chip button { width: 20px; height: 20px; border: 0; border-radius: 50%; background: rgba(0,0,0,.25); color: #fff; font-size: 10px; cursor: pointer; }
+.mk-empty { padding: 48px 20px; text-align: center; border: 1px dashed #2a2a30; border-radius: 14px; color: #8b8b94; font-size: 14px; }
+.mk-empty p { margin: 0 0 16px; line-height: 1.6; }
+.mk-empty .mk-bid { text-decoration: none; }
+button.mk-creator { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+.mk-creator.on .mk-ava { border-color: #5b5bf0; box-shadow: 0 0 0 2px #5b5bf0; }
+.top nav .cnt { display: inline-block; margin-left: 6px; min-width: 18px; padding: 1px 6px; border-radius: 99px; background: #5b5bf0; color: #fff; font-size: 11px; text-align: center; }

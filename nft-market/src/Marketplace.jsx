@@ -1,4 +1,5 @@
-import { Heart, Eye, ShoppingBag, ArrowRight, Wallet, LayoutGrid, ImagePlus, Tag, Check } from "lucide-react";
+import { useState } from "react";
+import { Heart, Eye, ShoppingBag, Wallet, LayoutGrid, ImagePlus, Tag, Check, Search } from "lucide-react";
 import "./Marketplace.css";
 
 const pad = (n) => String(n).padStart(2, "0");
@@ -12,6 +13,7 @@ const COLLECTIONS = [
   { name: "Cubbie Armor", by: "@wzard", ids: [1, 3, 4, 5] },
   { name: "Cubbie Warriors", by: "@nishar", ids: [2, 4, 5, 1] },
   { name: "Cubbie Genesis", by: "@kilau", ids: [6, 3, 2, 5] },
+  { name: "Cubbie Royal", by: "@nishar", ids: [13, 10, 11, 15] },
 ];
 
 const STEPS = [
@@ -21,7 +23,19 @@ const STEPS = [
   { icon: Tag, title: "List them for sale", text: "Choose an auction or a fixed price, then set how much you want to sell for." },
 ];
 
+const SORTS = {
+  newest: { label: "Newest", fn: (a, b) => b.id - a.id },
+  low: { label: "Price: low to high", fn: (a, b) => a.price - b.price },
+  high: { label: "Price: high to low", fn: (a, b) => b.price - a.price },
+  liked: { label: "Most liked", fn: (a, b) => b.likes - a.likes },
+  ending: { label: "Ending soon", fn: (a, b) => a.left - b.left },
+};
+
 export default function Marketplace({ items, sec, owned, liked, onOpen, onBid }) {
+  const [q, setQ] = useState("");
+  const [sort, setSort] = useState("newest");
+  const [creator, setCreator] = useState(null);
+
   const byId = (id) => items.find((i) => i.id === id);
 
   // Top creators: jumlahkan harga NFT per owner
@@ -33,17 +47,29 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
     }, {})
   );
 
+  const shown = items
+    .filter((i) => i.name.toLowerCase().includes(q.trim().toLowerCase()))
+    .filter((i) => !creator || i.owner === creator)
+    .sort(SORTS[sort].fn);
+
+  const reset = () => { setQ(""); setCreator(null); setSort("newest"); };
+
   return (
     <main className="mk">
       <section className="mk-sec">
         <h2>Top Creators</h2>
         <div className="mk-creators">
           {creators.map((c) => (
-            <div key={c.owner} className="mk-creator">
+            <button
+              key={c.owner}
+              className={`mk-creator ${creator === c.owner ? "on" : ""}`}
+              onClick={() => setCreator(creator === c.owner ? null : c.owner)}
+              aria-pressed={creator === c.owner}
+            >
               <div className="mk-ava"><img src={c.img} alt="" /><span className="mk-tick"><Check size={10} /></span></div>
               <b>{c.owner}</b>
               <small>{c.total.toFixed(2)} ETH</small>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -51,37 +77,55 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
       <section className="mk-sec">
         <div className="mk-head">
           <h2>Today's Picks</h2>
-          <a href="#market">Explore more <ArrowRight size={14} /></a>
+          <span className="mk-count">{shown.length} Cubbies</span>
         </div>
-        <div className="mk-grid">
-          {items.map((i) => (
-            <article key={i.id} className="mk-card">
-              <div className="mk-shot" onClick={() => onOpen(i)}>
-                <img src={i.img} alt={i.name} />
-                <span className="mk-like"><Heart size={11} fill={liked.includes(i.id) ? "currentColor" : "none"} /> {i.likes + (liked.includes(i.id) ? 1 : 0)}</span>
-                <span className="mk-time">{hms(i.left - sec)}</span>
-              </div>
-              <div className="mk-title">{i.name}</div>
-              <div className="mk-meta">
-                <div className="mk-by"><img src={i.img} alt="" /><div><small>Creator</small>{i.owner}</div></div>
-                <div className="mk-price"><small>{owned.includes(i.id) ? "Owned" : "Current Bid"}</small>{i.price} ETH</div>
-              </div>
-              <div className="mk-act">
-                <button className="mk-bid" onClick={() => onBid(i)} disabled={owned.includes(i.id)}>
-                  <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Place Bid"}
-                </button>
-                <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View History</button>
-              </div>
-            </article>
-          ))}
+
+        <div className="mk-tools">
+          <label className="mk-search">
+            <Search size={15} />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Cubbies" aria-label="Search Cubbies" />
+          </label>
+          <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort by">
+            {Object.entries(SORTS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+          </select>
         </div>
+        {creator && (
+          <div className="mk-chip">Creator: {creator} <button onClick={() => setCreator(null)} aria-label="Clear creator filter">✕</button></div>
+        )}
+
+        {shown.length === 0 ? (
+          <div className="mk-empty">
+            <p>No Cubbies match your search.</p>
+            <button className="mk-bid" onClick={reset}>Clear filters</button>
+          </div>
+        ) : (
+          <div className="mk-grid">
+            {shown.map((i) => (
+              <article key={i.id} className="mk-card">
+                <div className="mk-shot" onClick={() => onOpen(i)}>
+                  <img src={i.img} alt={i.name} />
+                  <span className="mk-like"><Heart size={11} fill={liked.includes(i.id) ? "currentColor" : "none"} /> {i.likes + (liked.includes(i.id) ? 1 : 0)}</span>
+                  <span className="mk-time">{hms(i.left - sec)}</span>
+                </div>
+                <div className="mk-title">{i.name}</div>
+                <div className="mk-meta">
+                  <div className="mk-by"><img src={i.img} alt="" /><div><small>Creator</small>{i.owner}</div></div>
+                  <div className="mk-price"><small>{owned.includes(i.id) ? "Owned" : "Current Bid"}</small>{i.price} ETH</div>
+                </div>
+                <div className="mk-act">
+                  <button className="mk-bid" onClick={() => onBid(i)} disabled={owned.includes(i.id)}>
+                    <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Place Bid"}
+                  </button>
+                  <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="mk-sec">
-        <div className="mk-head">
-          <h2>Popular Collection</h2>
-          <a href="#market">Explore more <ArrowRight size={14} /></a>
-        </div>
+        <div className="mk-head"><h2>Popular Collection</h2></div>
         <div className="mk-cols">
           {COLLECTIONS.map((c) => (
             <div key={c.name} className="mk-col">
