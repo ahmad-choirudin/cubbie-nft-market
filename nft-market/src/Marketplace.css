@@ -84,3 +84,26 @@
 button.mk-creator { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
 .mk-creator.on .mk-ava { border-color: #5b5bf0; box-shadow: 0 0 0 2px #5b5bf0; }
 .top nav .cnt { display: inline-block; margin-left: 6px; min-width: 18px; padding: 1px 6px; border-radius: 99px; background: #5b5bf0; color: #fff; font-size: 11px; text-align: center; }
+
+/* Create NFT */
+.cr { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 820px) { .cr { grid-template-columns: 1.2fr 1fr; align-items: start; } }
+.cr-form { display: flex; flex-direction: column; gap: 18px; }
+.cr-drop { position: relative; display: grid; place-items: center; aspect-ratio: 1; max-height: 420px; border: 1px dashed #3a3a42; border-radius: 14px; background: #111114; color: #8b8b94; cursor: pointer; overflow: hidden; }
+.cr-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.cr-drop img { width: 100%; height: 100%; object-fit: cover; }
+.cr-drop span { display: grid; gap: 10px; justify-items: center; font-size: 14px; }
+.cr-field { display: grid; gap: 8px; font-size: 13px; color: #c9c9d1; }
+.cr-field input { height: 46px; padding: 0 14px; border: 1px solid #2a2a30; border-radius: 10px; background: #111114; color: #fff; font: inherit; font-size: 15px; outline: 0; }
+.cr-field input:focus { border-color: #5b5bf0; }
+.cr-err { margin: 0; padding: 10px 14px; border-radius: 10px; background: rgba(255, 90, 110, .14); color: #ff8a98; font-size: 13px; }
+.cr-go { height: 48px; justify-content: center; background: #fff; color: #000; border-color: #fff; font-size: 14px; font-weight: 600; }
+.cr-go:hover:not(:disabled) { background: #e6e6ea; }
+.cr-prev small { margin-bottom: 10px; }
+.cr-blank { width: 100%; height: 100%; background: #0a0a0c; }
+.cr-list { display: grid; gap: 10px; }
+.cr-row { display: flex; align-items: center; gap: 14px; padding: 10px; border: 1px solid #25252b; border-radius: 12px; background: #17171b; }
+.cr-row img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
+.cr-row div { flex: 1; font-size: 14px; }
+.cr-row button { width: 38px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: #ff8a98; cursor: pointer; }
+.cr-row button:hover { background: rgba(255, 90, 110, .14); }

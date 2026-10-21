@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIcon } from "lucide-react";
 import Marketplace from "./Marketplace";
 import Collection from "./Collection";
+import Create from "./Create";
 import operator from "./assets/operator.jpg";
 import bomber from "./assets/bomber.jpg";
 import seraph from "./assets/seraph.jpg";
@@ -98,11 +99,12 @@ export default function App() {
   const [sel, setSel] = useState(null);
   const [owned, setOwned] = usePersist("cubbie-owned", []);
   const [liked, setLiked] = usePersist("cubbie-liked", []);
+  const [created, setCreated] = usePersist("cubbie-created", []);
   const [toast, setToast] = useState(null);
   const [menu, setMenu] = useState(false);
   const headerRef = useRef(null);
 
-  const pageFromHash = () => (location.hash === "#marketplace" ? "market" : location.hash === "#collection" ? "collection" : "home");
+  const pageFromHash = () => (location.hash === "#marketplace" ? "market" : location.hash === "#collection" ? "collection" : location.hash === "#create" ? "create" : "home");
   const [page, setPage] = useState(pageFromHash);
   useEffect(() => {
     const onHash = () => setPage(pageFromHash());
@@ -138,12 +140,16 @@ export default function App() {
   const toggleLike = (id) => setLiked((l) => (l.includes(id) ? l.filter((x) => x !== id) : [...l, id]));
   const [h, m, s] = hms(RELEASE - sec);
   const hero = [ITEMS[0], ITEMS[1], ITEMS[2]];
+  const items = [...ITEMS, ...created];
+  const me = w.acc ? short(w.acc) : "@you";
+  const onCreate = (n) => { setCreated((c) => [...c, n]); say(`${n.name} is now live in the marketplace.`); location.hash = "#marketplace"; };
+  const onRemove = (id) => { setCreated((c) => c.filter((x) => x.id !== id)); setOwned((o) => o.filter((x) => x !== id)); };
 
   return (
     <>
       <header className="top" ref={headerRef}>
         <a className="brand" href="#">Cubbie</a>
-        <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#release">Drops</a><a href="#collection">My Collection{owned.length > 0 && <span className="cnt">{owned.length}</span>}</a><a href="#hero">About</a></nav>
+        <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#create">Create</a><a href="#release">Drops</a><a href="#collection">My Collection{owned.length > 0 && <span className="cnt">{owned.length}</span>}</a><a href="#hero">About</a></nav>
         <div className="reg">
           {w.acc
             ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal} ETH</button>
@@ -152,11 +158,13 @@ export default function App() {
         <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
       </header>
 
-      {page === "collection" ? (
-        <Collection items={ITEMS} owned={owned} onOpen={setSel} />
+      {page === "create" ? (
+        <Create created={created} owner={me} onCreate={onCreate} onRemove={onRemove} />
+      ) : page === "collection" ? (
+        <Collection items={items} owned={owned} onOpen={setSel} />
       ) : page === "market" ? (
         <Marketplace
-          items={ITEMS}
+          items={items}
           sec={sec}
           owned={owned}
           liked={liked}
