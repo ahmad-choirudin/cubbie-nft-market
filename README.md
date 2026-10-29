@@ -45,13 +45,11 @@
   </tr>
 </table>
 
-<!--
 ## ◈ PREVIEW
 
 <p align="center">
   <img src="docs/preview.jpg" alt="Cubbie NFT Marketplace preview" width="100%" />
 </p>
--->
 
 ## ◈ TECH STACK
 
