@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://cubbie-nft.vercel.app"><strong>↗ OPEN LIVE DEMO</strong></a>
+  <a href="https://cubbienft.my.id"><strong>↗ OPEN LIVE DEMO</strong></a>
   &nbsp; · &nbsp;
   <a href="https://github.com/ahmad-choirudin"><strong>GITHUB PROFILE</strong></a>
 </p>
@@ -83,9 +83,9 @@ UI inspired by a Flacto marketplace design reference.
 Web3 Research · Crypto Markets · DeFi · Frontend Development
 
 <p align="center">
-  <a href="https://www.ahmadchoirudin.my.id/">Portfolio</a>
+  <a href="https://ahmadchoirudin.my.id/">Portfolio</a>
   &nbsp; · &nbsp;
-  <a href="https://cubbie-nft.vercel.app">Live Demo</a>
+  <a href="https://cubbienft.my.id">Live Demo</a>
   &nbsp; · &nbsp;
   <a href="https://github.com/ahmad-choirudin">GitHub</a>
   &nbsp; · &nbsp;
