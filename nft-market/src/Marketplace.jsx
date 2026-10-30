@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Heart, Eye, ShoppingBag, Wallet, LayoutGrid, ImagePlus, Tag, Check, Search } from "lucide-react";
+import { Eye, ShoppingBag, Wallet, LayoutGrid, ImagePlus, Tag, Check, Search } from "lucide-react";
+import ArtCard from "./ArtCard";
+import Avatar from "./Avatar";
 import "./Marketplace.css";
 
 const pad = (n) => String(n).padStart(2, "0");
@@ -99,26 +101,22 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
             <button className="mk-bid" onClick={reset}>Clear filters</button>
           </div>
         ) : (
-          <div className="mk-grid">
+          <div className={`mk-grid${!q.trim() && !creator ? " curated" : ""}`}>
             {shown.map((i) => (
-              <article key={i.id} className="mk-card">
-                <div className="mk-shot" onClick={() => onOpen(i)}>
-                  <img src={i.img} alt={i.name} />
-                  <span className="mk-like"><Heart size={11} fill={liked.includes(i.id) ? "currentColor" : "none"} /> {i.likes + (liked.includes(i.id) ? 1 : 0)}</span>
-                  <span className="mk-time">{hms(i.left - sec)}</span>
-                </div>
-                <div className="mk-title">{i.name}</div>
-                <div className="mk-meta">
-                  <div className="mk-by"><img src={i.img} alt="" /><div><small>Creator</small>{i.owner}</div></div>
-                  <div className="mk-price"><small>{owned.includes(i.id) ? "Owned" : "Current Bid"}</small>{i.price} ETH</div>
-                </div>
-                <div className="mk-act">
-                  <button className="mk-bid" onClick={() => onBid(i)} disabled={owned.includes(i.id)}>
-                    <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Place Bid"}
-                  </button>
-                  <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
-                </div>
-              </article>
+              <ArtCard
+                key={i.id}
+                item={i}
+                onOpen={() => onOpen(i)}
+                likes={i.likes + (liked.includes(i.id) ? 1 : 0)}
+                liked={liked.includes(i.id)}
+                time={hms(i.left - sec)}
+                priceLabel={owned.includes(i.id) ? "Owned" : "Current Bid"}
+              >
+                <button className="mk-bid" onClick={() => onBid(i)} disabled={owned.includes(i.id)}>
+                  <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Place Bid"}
+                </button>
+                <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
+              </ArtCard>
             ))}
           </div>
         )}
@@ -130,7 +128,7 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
           {COLLECTIONS.map((c) => (
             <div key={c.name} className="mk-col">
               <div className="mk-colhead">
-                <img src={byId(c.ids[0])?.img} alt="" />
+                <Avatar src={byId(c.ids[0])?.img} size={34} />
                 <div><b>{c.name}</b><small>Created by {c.by}</small></div>
               </div>
               <div className="mk-mosaic">
