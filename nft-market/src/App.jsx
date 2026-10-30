@@ -285,4 +285,4 @@ export default function App() {
       {toast && <div className={`toast ${toast.ok ? "" : "err"}`} role="status">{toast.ok ? <Check size={16} /> : <AlertCircle size={16} />} {toast.msg}</div>}
     </>
   );
-                                                         }
+}
