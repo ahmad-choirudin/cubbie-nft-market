@@ -57,6 +57,9 @@ body::after {
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
+/* Avatar bulat dengan zoom ke kepala (komponen Avatar.jsx) */
+.face { display: block; flex: 0 0 auto; width: var(--s, 28px); height: var(--s, 28px); border-radius: 50%; overflow: hidden; background: #000; }
+.face img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; transform: scale(2.1); transform-origin: 50% 24%; }
 h1, h2, h3 { text-wrap: balance; }
 :focus-visible { outline: 2px solid var(--glow); outline-offset: 3px; }
 
@@ -205,6 +208,7 @@ h1, h2, h3 { text-wrap: balance; }
   justify-content: center;
   padding: clamp(32px, 5vw, 64px) clamp(0px, 2vw, 24px) clamp(32px, 5vw, 64px) clamp(0px, 3vw, 40px);
 }
+.eyebrow { display: block; margin-bottom: 22px; color: var(--mute); font: 500 11px var(--bd); letter-spacing: 0.24em; text-transform: uppercase; }
 .copy h1 { font: 500 clamp(40px, 6.4vw, 88px) / 0.98 var(--hd); letter-spacing: -0.04em; }
 .copy p { color: var(--mute); margin: 28px 0 36px; max-width: 40ch; font-size: 16px; }
 .row { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -219,16 +223,7 @@ h1, h2, h3 { text-wrap: balance; }
   color: var(--mute);
 }
 .av { display: flex; }
-.av img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center 20%;
-  border: 2px solid var(--bg);
-  margin-right: -8px;
-  background: #000;
-}
+.av .face { margin-right: -8px; border: 2px solid var(--bg); }
 .who small { display: block; color: var(--tx); font-size: 12px; letter-spacing: 0.04em; }
 
 /* Ticker: garis lurus, bukan pita miring */
@@ -291,7 +286,7 @@ h1, h2, h3 { text-wrap: balance; }
 .prg { stroke: var(--tx); stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
 .ring text { fill: var(--mute); font: 500 13px var(--hd); letter-spacing: 0.04em; }
 .owner { display: flex; align-items: center; gap: 12px; margin: 34px 0; }
-.owner img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; object-position: center 20%; border: 1px solid var(--line2); }
+.owner .face { border: 1px solid var(--line2); }
 .owner small { display: block; color: var(--mute); line-height: 1.2; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
 
 /* ---------- Home: Top Artworks ---------- */
@@ -336,7 +331,6 @@ h1, h2, h3 { text-wrap: balance; }
 .ct { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 10px; font: 500 17px var(--hd); letter-spacing: -0.01em; }
 .ct span { display: flex; gap: 5px; align-items: center; font: 400 12px var(--bd); color: var(--ink2); }
 .ow { display: flex; align-items: center; gap: 10px; font-size: 13px; }
-.ow img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; object-position: center 20%; }
 .ow small { display: block; color: var(--ink2); line-height: 1.1; font-size: 11px; }
 .bid { display: flex; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid #15140f26; color: var(--ink2); font-size: 13px; }
 .bid b { color: var(--ink); font-weight: 600; }
@@ -434,6 +428,10 @@ h1, h2, h3 { text-wrap: balance; }
 }
 .toast.err { background: var(--err); color: #1c0805; }
 
+/* ---------- Reveal saat scroll (hook useReveal di App.jsx) ---------- */
+.rv { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.rv.in { opacity: 1; transform: none; }
+
 /* ---------- Animasi ---------- */
 @keyframes mq { to { transform: translateX(-50%); } }
 @keyframes fade { from { opacity: 0; } }
@@ -487,4 +485,4 @@ h1, h2, h3 { text-wrap: balance; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { animation: none !important; transition: none !important; }
-   }
+}
