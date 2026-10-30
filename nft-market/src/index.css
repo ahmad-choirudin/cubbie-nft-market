@@ -1,3 +1,11 @@
+/* ==========================================================================
+   CUBBIE — index.css  (Tahap 1: fondasi tema)
+   Isi: token desain, reset, header + menu mobile, tombol, halaman Home,
+        modal, toast.
+   Catatan: file ini dimuat SETELAH Marketplace.css (urutan import di main.jsx).
+   Semua warna/bentuk ada di :root — ubah di sini, seluruh situs ikut berubah.
+   ========================================================================== */
+
 :root {
   /* Permukaan: hitam hangat, bukan hitam-biru */
   --bg: #0a0a09;
