@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ImagePlus, Trash2 } from "lucide-react";
+import ArtCard from "./ArtCard";
 import "./Marketplace.css";
 
-// Perkecil gambar supaya muat di penyimpanan browser (maks 640px)
 function compress(file, max = 640) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -49,7 +49,7 @@ export default function Create({ created, owner, onCreate, onRemove }) {
     const p = parseFloat(price);
     if (!img) return setErr("Add an image for your Cubbie.");
     if (n.length < 2 || n.length > 40) return setErr("Name must be 2 to 40 characters.");
-    if (!(p > 0) || p > 1000) return setErr("Enter a price between 0.001 and 1000 ETH.");
+    if (!(p >= 0.001) || p > 1000) return setErr("Enter a price between 0.001 and 1000 ETH.");
     if (created.length >= 20) return setErr("You reached the limit of 20 NFTs. Remove one first.");
     setBusy(true);
     onCreate({ id: Date.now(), name: n, img, price: p, likes: 0, owner, left: 86400, mine: true });
@@ -81,14 +81,7 @@ export default function Create({ created, owner, onCreate, onRemove }) {
 
           <div className="cr-prev">
             <small>Preview</small>
-            <article className="mk-card">
-              <div className="mk-shot">{img ? <img src={img} alt="" /> : <div className="cr-blank" />}</div>
-              <div className="mk-title">{name.trim() || "Your Cubbie"}</div>
-              <div className="mk-meta">
-                <div className="mk-by"><div><small>Creator</small>{owner}</div></div>
-                <div className="mk-price"><small>Current Bid</small>{price || "0"} ETH</div>
-              </div>
-            </article>
+            <ArtCard item={{ name: name.trim() || "Your Cubbie", img, owner, price: price || "0", mine: true }} />
           </div>
         </div>
       </section>
