@@ -19,38 +19,13 @@
 .mk-head h2 { margin: 0; padding-bottom: 18px; border: 0; }
 .mk-count { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
 
-/* ---------- Top creators ---------- */
-.mk-creators { display: flex; gap: 24px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: none; }
+/* ---------- Filter creator (teks, bukan avatar) ---------- */
+.mk-creators { display: flex; gap: 28px; overflow-x: auto; margin-bottom: 36px; padding: 2px 2px 0; scrollbar-width: none; }
 .mk-creators::-webkit-scrollbar { display: none; }
-.mk-creator { flex: 0 0 auto; width: 96px; text-align: center; font-size: 12px; }
-button.mk-creator { background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
-.mk-creator b { display: block; margin-top: 10px; font-weight: 500; letter-spacing: 0.01em; }
-.mk-ava {
-  position: relative;
-  width: 76px;
-  height: 76px;
-  margin: 0 auto;
-  border-radius: 50%;
-  overflow: hidden;
-  background: #000;
-  border: 1px solid var(--line2);
-  transition: border-color 0.2s;
-}
-/* zoom ke kepala karakter (aman karena .mk-ava memotong dengan overflow) */
-.mk-ava img { width: 100%; height: 100%; object-fit: cover; transform: scale(2.1); transform-origin: 50% 24%; }
-.mk-tick {
-  position: absolute;
-  right: 11px;
-  bottom: 11px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--tx);
-  color: var(--bg);
-  display: grid;
-  place-items: center;
-}
-.mk-creator.on .mk-ava { border-color: var(--tx); box-shadow: 0 0 0 2px var(--tx); }
+.mk-creator { flex: 0 0 auto; padding: 8px 0; color: var(--mute); font: 500 13px var(--bd); letter-spacing: 0.02em; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s; }
+.mk-creator small { display: inline; margin-left: 6px; font-size: 11px; color: inherit; opacity: 0.6; }
+.mk-creator:hover { color: var(--tx); }
+.mk-creator.on { color: var(--tx); border-bottom-color: var(--tx); }
 
 /* ---------- Kartu karya (cetakan berbingkai) ---------- */
 .mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: clamp(20px, 3vw, 36px) clamp(16px, 2.4vw, 28px); }
@@ -163,14 +138,14 @@ button.mk-creator { background: none; border: 0; color: inherit; font: inherit; 
 .mk-mosaic img:hover { opacity: 0.85; }
 .mk-mosaic img:first-child { grid-row: 1 / 4; }
 
-/* ---------- Langkah ---------- */
-.mk-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: clamp(24px, 3vw, 40px); }
-.mk-step { padding-top: 22px; border-top: 1px solid var(--line2); }
-.mk-ic { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line2); color: var(--tx); margin-bottom: 18px; }
-.mk-step b { font: 500 16px var(--hd); letter-spacing: -0.01em; }
-.mk-step p { margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: var(--mute); max-width: 32ch; }
+/* ---------- Ajakan membuat karya ---------- */
+.mk-make { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 28px; padding-top: 40px; border-top: 1px solid var(--line); }
+.mk-make h2 { margin: 0 0 12px; padding: 0; border: 0; font-size: clamp(32px, 5vw, 64px); line-height: 1; }
+.mk-make p { margin: 0; color: var(--mute); font-size: 15px; }
+.mk-bid.solid { background: var(--tx); color: var(--bg); border-color: var(--tx); padding: 14px 26px; }
+.mk-bid.solid:hover:not(:disabled) { background: #fff; border-color: #fff; color: var(--bg); }
 
-/* ---------- Cari, urutkan, filter, kosong ---------- */
+/* ---------- Cari, urutkan, kosong ---------- */
 .mk-tools { display: flex; gap: 10px; margin-bottom: 20px; min-width: 0; }
 .mk-search {
   flex: 1;
@@ -201,8 +176,6 @@ button.mk-creator { background: none; border: 0; color: inherit; font: inherit; 
   font-size: 13px;
   text-overflow: ellipsis;
 }
-.mk-chip { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 20px; padding: 6px 8px 6px 14px; border-radius: 99px; background: var(--tx); color: var(--bg); font-size: 12px; }
-.mk-chip button { width: 20px; height: 20px; border: 0; border-radius: 50%; background: #0a0a0926; color: var(--bg); font-size: 10px; cursor: pointer; }
 .mk-empty { padding: 56px 20px; text-align: center; border: 1px dashed var(--line2); border-radius: var(--r); color: var(--mute); font-size: 14px; }
 .mk-empty p { margin: 0 0 18px; line-height: 1.7; }
 .mk-empty .mk-bid { text-decoration: none; }
