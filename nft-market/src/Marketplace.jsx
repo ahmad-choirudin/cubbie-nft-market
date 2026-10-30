@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, ShoppingBag, Wallet, LayoutGrid, ImagePlus, Tag, Check, Search } from "lucide-react";
+import { Eye, ShoppingBag, Search } from "lucide-react";
 import ArtCard from "./ArtCard";
 import Avatar from "./Avatar";
 import "./Marketplace.css";
@@ -18,13 +18,6 @@ const COLLECTIONS = [
   { name: "Cubbie Royal", by: "@nishar", ids: [13, 10, 11, 15] },
 ];
 
-const STEPS = [
-  { icon: Wallet, title: "Set up your wallet", text: "Install MetaMask, then press Register to connect your wallet to Cubbie." },
-  { icon: LayoutGrid, title: "Create your collection", text: "Group your Cubbies into one collection with a name and a short description." },
-  { icon: ImagePlus, title: "Add your NFTs", text: "Upload your artwork, set a title, and choose the collection it belongs to." },
-  { icon: Tag, title: "List them for sale", text: "Choose an auction or a fixed price, then set how much you want to sell for." },
-];
-
 const SORTS = {
   newest: { label: "Newest", fn: (a, b) => b.id - a.id },
   low: { label: "Price: low to high", fn: (a, b) => a.price - b.price },
@@ -40,11 +33,11 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
 
   const byId = (id) => items.find((i) => i.id === id);
 
-  // Top creators: jumlahkan harga NFT per owner
+  // Daftar creator untuk filter: jumlah karya per owner
   const creators = Object.values(
     items.reduce((acc, i) => {
-      acc[i.owner] = acc[i.owner] || { owner: i.owner, img: i.img, total: 0 };
-      acc[i.owner].total += i.price;
+      acc[i.owner] = acc[i.owner] || { owner: i.owner, count: 0 };
+      acc[i.owner].count += 1;
       return acc;
     }, {})
   );
@@ -58,24 +51,6 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
 
   return (
     <main className="mk">
-      <section className="mk-sec">
-        <h2>Top Creators</h2>
-        <div className="mk-creators">
-          {creators.map((c) => (
-            <button
-              key={c.owner}
-              className={`mk-creator ${creator === c.owner ? "on" : ""}`}
-              onClick={() => setCreator(creator === c.owner ? null : c.owner)}
-              aria-pressed={creator === c.owner}
-            >
-              <div className="mk-ava"><img src={c.img} alt="" /><span className="mk-tick"><Check size={10} /></span></div>
-              <b>{c.owner}</b>
-              <small>{c.total.toFixed(2)} ETH</small>
-            </button>
-          ))}
-        </div>
-      </section>
-
       <section className="mk-sec">
         <div className="mk-head">
           <h2>Today's Picks</h2>
@@ -91,9 +66,19 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
             {Object.entries(SORTS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
         </div>
-        {creator && (
-          <div className="mk-chip">Creator: {creator} <button onClick={() => setCreator(null)} aria-label="Clear creator filter">✕</button></div>
-        )}
+        <div className="mk-creators" role="group" aria-label="Filter by creator">
+          <button className={`mk-creator ${!creator ? "on" : ""}`} onClick={() => setCreator(null)} aria-pressed={!creator}>All</button>
+          {creators.map((c) => (
+            <button
+              key={c.owner}
+              className={`mk-creator ${creator === c.owner ? "on" : ""}`}
+              onClick={() => setCreator(creator === c.owner ? null : c.owner)}
+              aria-pressed={creator === c.owner}
+            >
+              {c.owner}<small>{c.count}</small>
+            </button>
+          ))}
+        </div>
 
         {shown.length === 0 ? (
           <div className="mk-empty">
@@ -141,17 +126,12 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
         </div>
       </section>
 
-      <section className="mk-sec">
-        <h2>Create and sell your NFTs</h2>
-        <div className="mk-steps">
-          {STEPS.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="mk-step">
-              <span className="mk-ic"><Icon size={18} /></span>
-              <b>{title}</b>
-              <p>{text}</p>
-            </div>
-          ))}
+      <section className="mk-sec mk-make">
+        <div>
+          <h2>Make your own.</h2>
+          <p>Upload an image, give it a name and a price.</p>
         </div>
+        <a className="mk-bid solid" href="#create">Create NFT</a>
       </section>
     </main>
   );
