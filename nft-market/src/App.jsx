@@ -118,6 +118,7 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [menu, setMenu] = useState(false);
   const headerRef = useRef(null);
+  const closeRef = useRef(null);
 
   const pageFromHash = () => (location.hash === "#marketplace" ? "market" : location.hash === "#collection" ? "collection" : location.hash === "#create" ? "create" : "home");
   const [page, setPage] = useState(pageFromHash);
@@ -133,6 +134,22 @@ export default function App() {
     }
   }, [page]);
   useReveal(page);
+
+  // Modal: Escape menutup, scroll latar dikunci, fokus pindah ke tombol tutup lalu kembali.
+  useEffect(() => {
+    if (!sel) return;
+    const prev = document.activeElement;
+    const onKey = (e) => { if (e.key === "Escape") setSel(null); };
+    window.addEventListener("keydown", onKey);
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = overflow;
+      prev?.focus?.();
+    };
+  }, [sel]);
 
   const say = (msg, ok = true) => { setToast({ msg, ok }); setTimeout(() => setToast(null), 3200); };
   const connect = () => {
@@ -264,8 +281,8 @@ export default function App() {
 
       {sel && (
         <div className="scrim" onClick={() => setSel(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={sel.name}>
-            <button className="x" onClick={() => setSel(null)} aria-label="Close"><X size={18} /></button>
+          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={sel.name}>
+            <button className="x" ref={closeRef} onClick={() => setSel(null)} aria-label="Close"><X size={18} /></button>
             <img src={sel.img} alt={sel.name} />
             <div className="info">
               <small>CUBBIE COLLECTION</small>
