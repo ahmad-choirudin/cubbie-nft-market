@@ -3,6 +3,7 @@ import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIc
 import Marketplace from "./Marketplace";
 import Collection from "./Collection";
 import Create from "./Create";
+import Avatar from "./Avatar";
 import operator from "./assets/operator.webp";
 import bomber from "./assets/bomber.webp";
 import seraph from "./assets/seraph.webp";
@@ -81,6 +82,20 @@ function useWallet() {
   return { acc, bal, connect, disconnect: () => load(null) };
 }
 
+// Munculkan elemen .rv dengan lembut saat masuk layar. Tanpa IntersectionObserver: langsung tampil.
+function useReveal(dep) {
+  useEffect(() => {
+    const els = document.querySelectorAll(".rv:not(.in)");
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window)) { els.forEach((e) => e.classList.add("in")); return; }
+    const io = new IntersectionObserver((list) => {
+      list.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    els.forEach((e) => io.observe(e));
+    return () => io.disconnect();
+  }, [dep]);
+}
+
 function Ring({ s }) {
   const r = 84, c = 2 * Math.PI * r;
   return (
@@ -117,6 +132,7 @@ export default function App() {
       setTimeout(() => document.querySelector(location.hash)?.scrollIntoView(), 0);
     }
   }, [page]);
+  useReveal(page);
 
   const say = (msg, ok = true) => { setToast({ msg, ok }); setTimeout(() => setToast(null), 3200); };
   const connect = () => {
@@ -178,12 +194,13 @@ export default function App() {
           <div className="stack">
             {hero.map((i, k) => (
               <figure key={i.id} className={`pol p${k}`}>
-                <img src={i.img} alt={i.name} />
+                <img src={i.img} alt={i.name} decoding="async" />
                 <figcaption><span>{i.name}</span><span>{i.price} ETH</span></figcaption>
               </figure>
             ))}
           </div>
           <div className="copy">
+            <span className="eyebrow">The Cubbie Collection</span>
             <h1>Collect Extra Ordinary Cubbies.</h1>
             <p>A collection of all-black 3D Cubbie figures minted as NFTs on Ethereum. Pick your favorite Cubbie and own it before the auction ends.</p>
             <div className="row">
@@ -191,7 +208,7 @@ export default function App() {
               <a className="btn ghost" href="#release">How it works?</a>
             </div>
             <div className="who">
-              <div className="av">{ITEMS.slice(3, 6).map((i) => <img key={i.id} src={i.img} alt="" />)}</div>
+              <div className="av">{ITEMS.slice(3, 6).map((i) => <Avatar key={i.id} src={i.img} size={32} />)}</div>
               <div>+500 NFT Collectors<small>★ 4.9</small></div>
             </div>
           </div>
@@ -202,8 +219,8 @@ export default function App() {
         <div className="track">{Array.from({ length: 24 }, (_, k) => <span key={k}>CUBBIE ART<i>✚</i></span>)}</div>
       </div>
 
-      <section className="release" id="release">
-        <div className="frame"><img src={seraph} alt="Cubbie Seraph" /></div>
+      <section className="release rv" id="release">
+        <div className="frame"><img src={seraph} alt="Cubbie Seraph" loading="lazy" decoding="async" /></div>
         <div>
           <div className="date">Upcoming drop</div>
           <h2>Cubbie Seraph: Genesis Edition</h2>
@@ -215,12 +232,12 @@ export default function App() {
             </div>
             <Ring s={+s} />
           </div>
-          <div className="owner"><img src={seraph} alt="" /><div><small>Owner</small>@nishar</div></div>
+          <div className="owner"><Avatar src={seraph} size={44} /><div><small>Owner</small>@nishar</div></div>
           <button className="btn" onClick={() => setSel(ITEMS[5])}>View Drop</button>
         </div>
       </section>
 
-      <section className="sec" id="market">
+      <section className="sec rv" id="market">
         <h2>Top Artworks</h2>
         <div className="railwrap">
           <button className="arr l" aria-label="Previous" onClick={() => rail.current.scrollBy({ left: -320, behavior: "smooth" })}><ChevronLeft size={18} /></button>
@@ -229,9 +246,9 @@ export default function App() {
               const [a, b, c] = hms(i.left - sec);
               return (
                 <article key={i.id} className="card" tabIndex={0} onClick={() => setSel(i)} onKeyDown={(e) => e.key === "Enter" && setSel(i)}>
-                  <div className="shot"><img src={i.img} alt={i.name} /><div className="tm">{a}:{b}:{c}</div></div>
+                  <div className="shot"><img src={i.img} alt={i.name} loading="lazy" decoding="async" /><div className="tm">{a}:{b}:{c}</div></div>
                   <div className="ct">{i.name}<span><Heart size={14} fill="currentColor" /> {i.likes + (liked.includes(i.id) ? 1 : 0)}</span></div>
-                  <div className="ow"><img src={i.img} alt="" /><div><small>Owner</small>{i.owner}</div></div>
+                  <div className="ow"><Avatar src={i.img} size={30} /><div><small>Owner</small>{i.owner}</div></div>
                   <div className="bid"><span>{owned.includes(i.id) ? "Owned" : "Current Bid"}</span><b>{i.price} ETH</b></div>
                 </article>
               );
@@ -268,4 +285,4 @@ export default function App() {
       {toast && <div className={`toast ${toast.ok ? "" : "err"}`} role="status">{toast.ok ? <Check size={16} /> : <AlertCircle size={16} />} {toast.msg}</div>}
     </>
   );
-}
+                                                         }
