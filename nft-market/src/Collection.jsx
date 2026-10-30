@@ -1,4 +1,5 @@
 import { Eye } from "lucide-react";
+import ArtCard from "./ArtCard";
 import "./Marketplace.css";
 
 export default function Collection({ items, owned, onOpen }) {
@@ -21,17 +22,9 @@ export default function Collection({ items, owned, onOpen }) {
         ) : (
           <div className="mk-grid">
             {mine.map((i) => (
-              <article key={i.id} className="mk-card">
-                <div className="mk-shot" onClick={() => onOpen(i)}><img src={i.img} alt={i.name} /></div>
-                <div className="mk-title">{i.name}</div>
-                <div className="mk-meta">
-                  <div className="mk-by"><img src={i.img} alt="" /><div><small>Creator</small>{i.owner}</div></div>
-                  <div className="mk-price"><small>Paid</small>{i.price} ETH</div>
-                </div>
-                <div className="mk-act">
-                  <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
-                </div>
-              </article>
+              <ArtCard key={i.id} item={i} onOpen={() => onOpen(i)} priceLabel="Paid">
+                <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
+              </ArtCard>
             ))}
           </div>
         )}
