@@ -42,11 +42,15 @@ const ITEMS = [
 const RELEASE = 3 * 3600 + 24 * 60 + 56;
 const pad = (n) => String(n).padStart(2, "0");
 const hms = (s) => { s = Math.max(0, s); return [Math.floor(s / 3600), Math.floor((s % 3600) / 60), s % 60].map(pad); };
-function usePersist(key, init) {
+function usePersist(key, init, ok = () => true) {
   const [v, setV] = useState(() => {
-    try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : init; } catch { return init; }
+    try {
+      const r = localStorage.getItem(key);
+      const p = r ? JSON.parse(r) : init;
+      return Array.isArray(init) ? (Array.isArray(p) ? p.filter(ok) : init) : p;
+    } catch { return init; }
   });
-  useEffect(() => { try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* abaikan */ } }, [key, v]);
+  useEffect(() => { try { localStorage.setItem(key, JSON.stringify(v)); } catch { } }, [key, v]);
   return [v, setV];
 }
 const short = (a) => `${a.slice(0, 6)}…${a.slice(-4)}`;
@@ -58,28 +62,41 @@ function useClock() {
   return sec;
 }
 
+const OFF_KEY = "cubbie-wallet-off";
+const walletOff = {
+  get: () => { try { return localStorage.getItem(OFF_KEY) === "1"; } catch { return false; } },
+  set: (on) => { try { if (on) localStorage.setItem(OFF_KEY, "1"); else localStorage.removeItem(OFF_KEY); } catch { /* abaikan */ } },
+};
+
 function useWallet() {
   const [acc, setAcc] = useState(null);
   const [bal, setBal] = useState(null);
   const load = async (a) => {
     setAcc(a);
     if (!a) return setBal(null);
-    const b = await window.ethereum.request({ method: "eth_getBalance", params: [a, "latest"] });
-    setBal((parseInt(b, 16) / 1e18).toFixed(3));
+    try {
+      const b = await window.ethereum.request({ method: "eth_getBalance", params: [a, "latest"] });
+      setBal((parseInt(b, 16) / 1e18).toFixed(3));
+    } catch { setBal(null); }
   };
   useEffect(() => {
     const e = window.ethereum;
     if (!e) return;
-    e.request({ method: "eth_accounts" }).then((l) => load(l[0] || null)).catch(() => {});
-    const on = (l) => load(l[0] || null);
-    e.on?.("accountsChanged", on);
-    return () => e.removeListener?.("accountsChanged", on);
+    const sync = () => e.request({ method: "eth_accounts" }).then((l) => load(l[0] || null)).catch(() => {});
+    if (!walletOff.get()) sync();
+    const onAcc = (l) => { if (!walletOff.get()) load(l[0] || null); };
+    const onChain = () => { if (!walletOff.get()) sync(); };
+    e.on?.("accountsChanged", onAcc);
+    e.on?.("chainChanged", onChain);
+    return () => { e.removeListener?.("accountsChanged", onAcc); e.removeListener?.("chainChanged", onChain); };
   }, []);
   const connect = async () => {
     if (!window.ethereum) throw new Error("Wallet not found. Please install MetaMask first.");
-    load((await window.ethereum.request({ method: "eth_requestAccounts" }))[0]);
+    const l = await window.ethereum.request({ method: "eth_requestAccounts" });
+    walletOff.set(false);
+    load(l[0] || null);
   };
-  return { acc, bal, connect, disconnect: () => load(null) };
+  return { acc, bal, connect, disconnect: () => { walletOff.set(true); load(null); } };
 }
 
 // Munculkan elemen .rv dengan lembut saat masuk layar. Tanpa IntersectionObserver: langsung tampil.
@@ -111,9 +128,9 @@ export default function App() {
   const w = useWallet();
   const sec = useClock();
   const rail = useRef(null);
-  const [sel, setSel] = useState(null);
-  const [owned, setOwned] = usePersist("cubbie-owned", []);
-  const [liked, setLiked] = usePersist("cubbie-liked", []);
+  const [owned, setOwned] = usePersist("cubbie-owned", [], (x) => typeof x === "number");
+  const [liked, setLiked] = usePersist("cubbie-liked", [], (x) => typeof x === "number");
+  const [created, setCreated] = usePersist("cubbie-created", [], (x) => x && typeof x.name === "string" && typeof x.img === "string" && typeof x.price === "number");
   const [created, setCreated] = usePersist("cubbie-created", []);
   const [toast, setToast] = useState(null);
   const [menu, setMenu] = useState(false);
@@ -185,7 +202,7 @@ export default function App() {
         <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#create">Create</a><a href="#release">Drops</a><a href="#collection">My Collection{owned.length > 0 && <span className="cnt">{owned.length}</span>}</a><a href="#hero">About</a></nav>
         <div className="reg">
           {w.acc
-            ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal} ETH</button>
+            ? <button className="btn ghost sm" onClick={w.disconnect} title="Disconnect wallet"><span className="dot" />{short(w.acc)} · {w.bal ?? "—"} ETH</button>
             : <button className="btn" onClick={connect}>Register</button>}
           <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
         </div>
