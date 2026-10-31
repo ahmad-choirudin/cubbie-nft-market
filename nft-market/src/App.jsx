@@ -131,8 +131,8 @@ export default function App() {
   const [owned, setOwned] = usePersist("cubbie-owned", [], (x) => typeof x === "number");
   const [liked, setLiked] = usePersist("cubbie-liked", [], (x) => typeof x === "number");
   const [created, setCreated] = usePersist("cubbie-created", [], (x) => x && typeof x.name === "string" && typeof x.img === "string" && typeof x.price === "number");
-  const [created, setCreated] = usePersist("cubbie-created", []);
   const [toast, setToast] = useState(null);
+  const [sel, setSel] = useState(null);
   const [menu, setMenu] = useState(false);
   const headerRef = useRef(null);
   const closeRef = useRef(null);
