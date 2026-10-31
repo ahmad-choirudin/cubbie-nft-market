@@ -41,7 +41,7 @@
 
 /* ---------- Reset & dasar ---------- */
 * { box-sizing: border-box; margin: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 96px; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--tx);
@@ -50,7 +50,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
-/* Grain halus (tekstur kertas). Hapus blok ini kalau tidak suka. */
+/* Grain halus (tekstur kertas). */
 body::after {
   content: "";
   position: fixed;
