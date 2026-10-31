@@ -1,240 +1,123 @@
-.mk {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px) 96px;
-  color: var(--tx);
-}
-.mk-sec { margin-top: clamp(72px, 10vw, 128px); }
-.mk-sec:first-child { margin-top: 8px; }
-.mk h2 {
-  font: 500 clamp(28px, 3.6vw, 44px) / 1.05 var(--hd);
-  letter-spacing: -0.03em;
-  margin: 0 0 32px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--line);
-}
-.mk small { display: block; font-size: 11px; color: var(--mute); font-weight: 400; }
-
-.mk-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
-.mk-head h2 { margin: 0; padding-bottom: 18px; border: 0; }
-.mk-count { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
-
-/* ---------- Filter creator (teks, bukan avatar) ---------- */
-.mk-creators { display: flex; gap: 28px; overflow-x: auto; margin-bottom: 36px; padding: 2px 2px 0; scrollbar-width: none; }
-.mk-creators::-webkit-scrollbar { display: none; }
-.mk-creator { flex: 0 0 auto; padding: 8px 0; color: var(--mute); font: 500 13px var(--bd); letter-spacing: 0.02em; border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s; }
-.mk-creator small { display: inline; margin-left: 6px; font-size: 11px; color: inherit; opacity: 0.6; }
-.mk-creator:hover { color: var(--tx); }
-.mk-creator.on { color: var(--tx); border-bottom-color: var(--tx); }
-
-/* ---------- Kartu karya (cetakan berbingkai) ---------- */
-.mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: clamp(20px, 3vw, 36px) clamp(16px, 2.4vw, 28px); }
-.mk-card {
-  background: var(--mat);
-  color: var(--ink);
-  border-radius: 1px;
-  padding: 12px 12px 14px;
-  box-shadow: var(--shadow-print);
-  transition: transform 0.45s var(--ease);
-}
-.mk-card:hover { transform: translateY(-4px); }
-.mk-card small { color: var(--ink2); }
-.mk-shot { position: relative; aspect-ratio: 1; overflow: hidden; cursor: pointer; background: #000; }
-.mk-shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s var(--ease); }
-.mk-card:hover .mk-shot img { transform: scale(1.03); }
-.mk-like {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  font-size: 11px;
-  padding: 3px 9px;
-  border-radius: 99px;
-  background: #0a0a09b3;
-  color: var(--tx);
-}
-.mk-time {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  transform: translateX(-50%);
-  font-size: 11px;
-  padding: 4px 12px;
-  border-radius: 99px;
-  background: #0a0a09b3;
-  color: var(--tx);
-  font-variant-numeric: tabular-nums;
-}
-.mk-title { margin: 14px 0 12px; font: 500 16px var(--hd); letter-spacing: -0.01em; }
-.mk-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
-.mk-by { display: flex; gap: 8px; align-items: center; }
-.mk-price { text-align: right; font-weight: 600; }
-.mk-act { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #15140f26; }
-
-/* Avatar untuk gambar unggahan: tanpa zoom */
-.face.flat img { transform: none; }
-.cr-prev .mk-shot { cursor: default; }
-
-/* ---------- Grid terkurasi (hanya saat tanpa cari/filter) ----------
-   Kartu pertama tampil lebar seperti karya unggulan, sisanya berirama
-   dengan kolom selang-seling turun sedikit. Hapus blok ini untuk grid rata. */
-.mk-grid.curated { align-items: start; }
-@media (min-width: 821px) {
-  .mk-grid.curated { grid-template-columns: repeat(3, 1fr); }
-  .mk-grid.curated > .mk-card:nth-child(3n) { margin-top: 44px; }
-  .mk-grid.curated > .mk-card:first-child {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    grid-template-rows: 1fr auto auto;
-    column-gap: clamp(24px, 5vw, 64px);
-    padding: 16px;
-    margin-top: 0;
-  }
-  .mk-grid.curated > .mk-card:first-child .mk-shot { grid-row: 1 / span 3; }
-  .mk-grid.curated > .mk-card:first-child .mk-title { grid-column: 2; align-self: end; margin: 0 0 20px; font-size: clamp(26px, 3.6vw, 44px); line-height: 1.05; letter-spacing: -0.03em; }
-  .mk-grid.curated > .mk-card:first-child .mk-meta { grid-column: 2; }
-  .mk-grid.curated > .mk-card:first-child .mk-act { grid-column: 2; margin-top: 22px; }
-}
-@media (min-width: 1100px) {
-  .mk-grid.curated { grid-template-columns: repeat(4, 1fr); }
-  .mk-grid.curated > .mk-card:nth-child(3n) { margin-top: 0; }
-  .mk-grid.curated > .mk-card:nth-child(odd):not(:first-child) { margin-top: 44px; }
-}
-
-/* ---------- Tombol halaman dalam ---------- */
-.mk-bid {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-  font: 600 11px var(--bd);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--tx);
-  background: transparent;
-  border: 1px solid var(--line2);
-  border-radius: var(--r);
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-.mk-bid:hover:not(:disabled) { background: var(--tx); color: var(--bg); border-color: var(--tx); }
-.mk-bid:disabled { opacity: 0.45; cursor: default; }
-/* di atas mat terang, tombol memakai warna tinta */
-.mk-card .mk-bid { color: var(--ink); border-color: var(--ink); }
-.mk-card .mk-bid:hover:not(:disabled) { background: var(--ink); color: var(--mat); border-color: var(--ink); }
-.mk-hist { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--ink2); background: none; border: 0; cursor: pointer; }
-.mk-hist:hover { color: var(--ink); }
-
-/* ---------- Koleksi populer ---------- */
-.mk-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-.mk-col { background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; }
-.mk-colhead { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; font-size: 14px; }
-.mk-mosaic { display: grid; grid-template-columns: 1.4fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 8px; aspect-ratio: 1.15; }
-.mk-mosaic img { width: 100%; height: 100%; object-fit: cover; border-radius: 1px; cursor: pointer; transition: opacity 0.2s; }
-.mk-mosaic img:hover { opacity: 0.85; }
-.mk-mosaic img:first-child { grid-row: 1 / 4; }
-
-/* ---------- Ajakan membuat karya ---------- */
-.mk-make { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 28px; padding-top: 40px; border-top: 1px solid var(--line); }
-.mk-make h2 { margin: 0 0 12px; padding: 0; border: 0; font-size: clamp(32px, 5vw, 64px); line-height: 1; }
-.mk-make p { margin: 0; color: var(--mute); font-size: 15px; }
-.mk-bid.solid { background: var(--tx); color: var(--bg); border-color: var(--tx); padding: 14px 26px; }
-.mk-bid.solid:hover:not(:disabled) { background: #fff; border-color: #fff; color: var(--bg); }
-
-/* ---------- Cari, urutkan, kosong ---------- */
-.mk-tools { display: flex; gap: 10px; margin-bottom: 20px; min-width: 0; }
-.mk-search {
-  flex: 1;
+.mk-tools {
+  width: 100%;
   min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 14px;
-  height: 44px;
-  border: 1px solid var(--line2);
-  border-radius: var(--r);
-  background: var(--bg2);
-  color: var(--mute);
 }
-.mk-search:focus-within { border-color: var(--tx); }
-.mk-search input { flex: 1; width: 100%; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--tx); font: inherit; font-size: 14px; }
+
 .mk-tools select {
-  flex: 0 0 auto;
-  width: auto;
-  max-width: 44%;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid var(--line2);
-  border-radius: var(--r);
-  background: var(--bg2);
-  color: var(--tx);
-  font: inherit;
-  font-size: 13px;
-  text-overflow: ellipsis;
+  min-width: 0;
 }
-.mk-empty { padding: 56px 20px; text-align: center; border: 1px dashed var(--line2); border-radius: var(--r); color: var(--mute); font-size: 14px; }
-.mk-empty p { margin: 0 0 18px; line-height: 1.7; }
-.mk-empty .mk-bid { text-decoration: none; }
 
-/* ---------- Create NFT ---------- */
-.cr { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 56px); }
-@media (min-width: 820px) { .cr { grid-template-columns: 1.2fr 1fr; align-items: start; } }
-.cr-form { display: flex; flex-direction: column; gap: 20px; }
-.cr-drop {
-  position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  max-height: 420px;
-  border: 1px dashed var(--line2);
-  border-radius: var(--r);
-  background: var(--bg2);
-  color: var(--mute);
-  cursor: pointer;
-  overflow: hidden;
-  transition: border-color 0.2s;
+.mk-card,
+.mk-col,
+.cr-form,
+.cr-prev {
+  min-width: 0;
 }
-.cr-drop:hover,
-.cr-drop:focus-within { border-color: var(--tx); }
-.cr-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-.cr-drop img { width: 100%; height: 100%; object-fit: cover; }
-.cr-drop span { display: grid; gap: 10px; justify-items: center; font-size: 14px; }
-.cr-field { display: grid; gap: 8px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+
+.mk-card img {
+  max-width: 100%;
+}
+
 .cr-field input {
-  height: 48px;
-  padding: 0 14px;
-  border: 1px solid var(--line2);
-  border-radius: var(--r);
-  background: var(--bg2);
-  color: var(--tx);
-  font: 400 15px var(--bd);
-  letter-spacing: 0;
-  text-transform: none;
-  outline: 0;
+  width: 100%;
+  min-width: 0;
 }
-.cr-field input:focus { border-color: var(--tx); }
-.cr-err { margin: 0; padding: 11px 14px; border-radius: var(--r); background: #e0766b24; color: #f0a198; font-size: 13px; }
-.cr-go { height: 48px; justify-content: center; background: var(--tx); color: var(--bg); border-color: var(--tx); font-size: 12px; }
-.cr-go:hover:not(:disabled) { background: #fff; color: var(--bg); border-color: #fff; }
-.cr-prev small { margin-bottom: 12px; }
-.cr-blank { width: 100%; height: 100%; background: #050504; }
-.cr-list { display: grid; gap: 10px; }
-.cr-row { display: flex; align-items: center; gap: 14px; padding: 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg3); }
-.cr-row img { width: 52px; height: 52px; border-radius: 1px; object-fit: cover; }
-.cr-row div { flex: 1; font-size: 14px; }
-.cr-row button { width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: var(--r); background: transparent; color: var(--err); cursor: pointer; }
-.cr-row button:hover { background: #e0766b24; }
 
-/* ---------- Layar kecil ---------- */
+/* Clear keyboard focus */
+.mk-bid:focus-visible,
+.mk-creator:focus-visible,
+.mk-hist:focus-visible,
+.mk-tools input:focus-visible,
+.mk-tools select:focus-visible,
+.cr-field input:focus-visible,
+.cr-drop:focus-within {
+  outline: 2px solid #C4F56A;
+  outline-offset: 3px;
+}
+
+/* Compact mobile layout */
 @media (max-width: 560px) {
-  .mk-grid { grid-template-columns: repeat(2, 1fr); gap: 16px 12px; }
-  .mk-card { padding: 8px 8px 12px; }
-  .mk-act { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .mk-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .mk-price { text-align: left; }
-  .mk-card .mk-bid { padding: 9px 12px; letter-spacing: 0.08em; }
+  .mk {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .mk-head {
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .mk-head h2 {
+    font-size: clamp(24px, 7vw, 32px);
+  }
+
+  .mk-count {
+    font-size: 9px;
+  }
+
+  .mk-tools {
+    gap: 7px;
+  }
+
+  .mk-tools select {
+    max-width: 42%;
+    font-size: 11px;
+    padding: 0 8px;
+  }
+
+  .mk-creators {
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .mk-card .mk-bid {
+    width: 100%;
+    font-size: 10px;
+  }
+
+  .cr {
+    gap: 28px;
+  }
+
+  .cr-drop {
+    max-height: none;
+  }
+}
+
+/* Single-column cards on very small phones */
+@media (max-width: 380px) {
+  .mk-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .mk-card {
+    padding: 10px;
+  }
+
+  .mk-card .mk-bid {
+    width: auto;
+  }
+
+  .mk-tools select {
+    max-width: 40%;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mk-card,
+  .mk-shot img,
+  .mk-bid,
+  .mk-creator {
+    transition: none !important;
+  }
+
+  .mk-card:hover {
+    transform: none;
+  }
+
+  .mk-card:hover .mk-shot img {
+    transform: none;
+  }
 }
