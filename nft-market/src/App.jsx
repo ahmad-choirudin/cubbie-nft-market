@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle, Menu as MenuIcon } from "lucide-react";
+import { Heart, ChevronLeft, ChevronRight, X, Check, AlertCircle } from "lucide-react";
+import Header from "./Header";
+import Footer from "./Footer";
 import Marketplace from "./Marketplace";
 import Collection from "./Collection";
 import Create from "./Create";
@@ -134,7 +136,6 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [sel, setSel] = useState(null);
   const [menu, setMenu] = useState(false);
-  const headerRef = useRef(null);
   const closeRef = useRef(null);
 
   const pageFromHash = () => (location.hash === "#marketplace" ? "market" : location.hash === "#collection" ? "collection" : location.hash === "#create" ? "create" : "home");
@@ -197,8 +198,15 @@ export default function App() {
 
   return (
     <>
-      <header className="top" ref={headerRef}>
-        <a className="brand" href="#">Cubbie</a>
+  <Header
+  owned={owned.length}
+  wallet={w.acc ? `${short(w.acc)} · ${w.bal ?? "—"} ETH` : null}
+  onConnect={connect}
+  onDisconnect={w.disconnect}
+  menu={menu}
+  setMenu={setMenu}
+/>    
+  <a className="brand" href="#">Cubbie</a>
         <nav className={menu ? "open" : ""} style={menu ? { top: headerRef.current?.offsetHeight } : undefined} onClick={() => setMenu(false)}><a href="#marketplace">Marketplace</a><a href="#create">Create</a><a href="#release">Drops</a><a href="#collection">My Collection{owned.length > 0 && <span className="cnt">{owned.length}</span>}</a><a href="#hero">About</a></nav>
         <div className="reg">
           {w.acc
@@ -206,7 +214,7 @@ export default function App() {
             : <button className="btn" onClick={connect}>Register</button>}
           <button className="burger" aria-label="Menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>{menu ? <X size={18} /> : <MenuIcon size={18} />}</button>
         </div>
-      </header>
+  </header>
 
       {page === "create" ? (
         <Create created={created} owner={me} onCreate={onCreate} onRemove={onRemove} />
@@ -294,7 +302,7 @@ export default function App() {
         </>
       )}
 
-      <footer className="foot">© 2026 Cubbie. All artworks belong to the CUBBIE collection.</footer>
+      </footer>
 
       {sel && (
         <div className="scrim" onClick={() => setSel(null)}>
