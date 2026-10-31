@@ -98,7 +98,7 @@ export default function Marketplace({ items, sec, owned, liked, onOpen, onBid })
                 priceLabel={owned.includes(i.id) ? "Owned" : "Current Bid"}
               >
                 <button className="mk-bid" onClick={() => onBid(i)} disabled={owned.includes(i.id)}>
-                  <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Place Bid"}
+                  <ShoppingBag size={13} /> {owned.includes(i.id) ? "Owned" : "Buy Now"}
                 </button>
                 <button className="mk-hist" onClick={() => onOpen(i)}><Eye size={14} /> View</button>
               </ArtCard>
