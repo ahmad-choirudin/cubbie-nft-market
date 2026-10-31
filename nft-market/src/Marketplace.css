@@ -1,123 +1,115 @@
-.mk-tools {
-  width: 100%;
-  min-width: 0;
+/* =========================================
+   CUBBIE WORLD — MARKETPLACE BRAND
+========================================= */
+
+/* NFT cards: dark collectible surfaces */
+.mk-card {
+  background: var(--bg3);
+  color: var(--tx);
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 45px -25px #000;
 }
 
-.mk-tools select {
-  min-width: 0;
+.mk-card small {
+  color: var(--mute);
 }
 
-.mk-card,
-.mk-col,
-.cr-form,
-.cr-prev {
-  min-width: 0;
+.mk-title {
+  color: var(--tx);
 }
 
-.mk-card img {
-  max-width: 100%;
+.mk-act {
+  border-top-color: var(--line);
 }
 
-.cr-field input {
-  width: 100%;
-  min-width: 0;
+.mk-hist {
+  color: var(--mute);
 }
 
-/* Clear keyboard focus */
-.mk-bid:focus-visible,
-.mk-creator:focus-visible,
-.mk-hist:focus-visible,
-.mk-tools input:focus-visible,
-.mk-tools select:focus-visible,
-.cr-field input:focus-visible,
+.mk-hist:hover {
+  color: var(--accent);
+}
+
+/* Creator filters */
+.mk-creator.on {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.mk-creator:hover {
+  color: var(--accent);
+}
+
+/* NFT purchase buttons */
+.mk-card .mk-bid {
+  color: var(--accent);
+  border-color: #C4F56A70;
+  background: transparent;
+}
+
+.mk-card .mk-bid:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+/* Main marketplace CTA */
+.mk-bid.solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.mk-bid.solid:hover:not(:disabled) {
+  background: #D4FF8C;
+  border-color: #D4FF8C;
+  color: var(--accent-ink);
+}
+
+/* Search and filters */
+.mk-search:focus-within,
+.mk-tools select:focus-visible {
+  border-color: var(--accent);
+}
+
+.mk-empty {
+  border-color: #C4F56A55;
+}
+
+/* Create NFT */
+.cr-drop:hover,
 .cr-drop:focus-within {
-  outline: 2px solid #C4F56A;
-  outline-offset: 3px;
+  border-color: var(--accent);
+  background: #C4F56A09;
 }
 
-/* Compact mobile layout */
-@media (max-width: 560px) {
-  .mk {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-
-  .mk-head {
-    gap: 10px;
-    margin-bottom: 22px;
-  }
-
-  .mk-head h2 {
-    font-size: clamp(24px, 7vw, 32px);
-  }
-
-  .mk-count {
-    font-size: 9px;
-  }
-
-  .mk-tools {
-    gap: 7px;
-  }
-
-  .mk-tools select {
-    max-width: 42%;
-    font-size: 11px;
-    padding: 0 8px;
-  }
-
-  .mk-creators {
-    gap: 18px;
-    margin-bottom: 24px;
-  }
-
-  .mk-card .mk-bid {
-    width: 100%;
-    font-size: 10px;
-  }
-
-  .cr {
-    gap: 28px;
-  }
-
-  .cr-drop {
-    max-height: none;
-  }
+.cr-field input:focus {
+  border-color: var(--accent);
 }
 
-/* Single-column cards on very small phones */
-@media (max-width: 380px) {
-  .mk-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .mk-card {
-    padding: 10px;
-  }
-
-  .mk-card .mk-bid {
-    width: auto;
-  }
-
-  .mk-tools select {
-    max-width: 40%;
-  }
+.cr-go {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
 }
 
-/* Respect reduced-motion preferences */
+.cr-go:hover:not(:disabled) {
+  background: #D4FF8C;
+  color: var(--accent-ink);
+  border-color: #D4FF8C;
+}
+
+/* Collection surfaces */
+.mk-col,
+.cr-row {
+  background: var(--bg3);
+  border-color: var(--line);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mk-card,
-  .mk-shot img,
   .mk-bid,
   .mk-creator {
     transition: none !important;
-  }
-
-  .mk-card:hover {
-    transform: none;
-  }
-
-  .mk-card:hover .mk-shot img {
-    transform: none;
   }
 }
