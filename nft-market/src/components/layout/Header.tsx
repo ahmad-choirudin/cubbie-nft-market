@@ -114,11 +114,11 @@ export default function Header({ page, owned, wallet, onConnect, onDisconnect, m
       </Button>
 
       <PageContainer className="flex h-16 items-center gap-4">
-        <a href="#" className="flex shrink-0 flex-col items-stretch" aria-label="Cubbie Market home">
+        <a href="#" className="flex shrink-0 items-center gap-3" aria-label="Cubbie Market home">
           <span className="display text-t-2xl leading-none">
             Cub<span className="text-acc">bie</span>
           </span>
-          <span className="display mt-1 block bg-acc pl-[0.45em] text-center text-[0.72rem] leading-[1.35] tracking-[0.45em] text-bg">
+          <span className="display hidden bg-acc py-1 pl-[1.9rem] pr-6 text-[0.8rem] leading-none tracking-[0.6em] text-bg md:block">
             Market
           </span>
         </a>
