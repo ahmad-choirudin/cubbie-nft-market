@@ -1,0 +1,120 @@
+/* CUBBIE design tokens */
+:root {
+  /* Color */
+  --color-bg: #090a09;
+  --color-bg-2: #111411;
+  --color-card: #171b17;
+  --color-accent: #c4f56a;
+  --color-accent-ink: #090a09;
+  --color-text: #ecefe8;
+  --color-text-2: #92998f;
+  --color-border: #292f28;
+  --color-border-strong: #46534b;
+  --color-ok: #8fd3a8;
+  --color-danger: #e0766b;
+
+  /* Typography */
+  --font-display: "Archivo Variable", "Archivo", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;   
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;   
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+  --text-4xl: 3.5rem;   /* section display */
+  --text-5xl: 4.5rem;   /* hero display */
+  --leading-tight: 1.05;
+  --leading-body: 1.6;
+  --tracking-tight: 0;
+  --tracking-wide: 0.14em;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  --space-9: 112px;
+  --gutter: clamp(16px, 3vw, 32px);
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* Container widths */
+  --container-sm: 640px;
+  --container-md: 960px;
+  --container-lg: 1100px;
+  --container-xl: 1240px;
+
+  /* Depth */
+  --shadow-sm: 0 1px 2px #0008;
+  --shadow-md: 0 12px 28px -14px #000c;
+  --shadow-lg: 0 28px 50px -22px #000, 0 8px 18px -8px #000;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur-base: 260ms;
+  --dur-slow: 600ms;
+
+  /* Focus */
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-offset: 3px;
+
+  /* Touch */
+  --tap: 44px;
+
+  /* Semantic aliases */
+  --color-surface: var(--color-bg-2);
+  --color-muted: var(--color-text-2);
+  --color-void: #050504;
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  --color-accent-glow: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  --color-danger-soft: color-mix(in srgb, var(--color-danger) 14%, transparent);
+  --color-danger-text: #f0a198;
+  --color-overlay: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  --color-scrim: color-mix(in srgb, #000 85%, transparent);
+
+  /* Layout */
+  --section-y: 96px;
+  --card-ratio: 4 / 5;
+  --field-h: 48px;
+  --color-art-stage: #202725;
+
+  /* Layers */
+  --z-header: 20;
+  --z-modal: 50;
+  --z-toast: 60;
+}
+
+@media (max-width: 820px) {
+  :root { --section-y: 72px; }
+}
+
+@media (max-width: 820px) {
+  :root {
+    --text-4xl: 3rem;
+    --text-5xl: 3.75rem;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --text-xl: 1.25rem;
+    --text-2xl: 1.625rem;
+    --text-3xl: 2rem;
+    --text-4xl: 2.125rem;
+    --text-5xl: 2.375rem;
+    --section-y: 56px;
+  }
+}
